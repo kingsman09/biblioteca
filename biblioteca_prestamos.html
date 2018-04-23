@@ -9,7 +9,7 @@
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
-    <script src="biblioteca.js"></script>
+    
     <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 </head>
 
@@ -23,8 +23,8 @@
             <input type="button" id="btn_libros" class="botones" value="Libros" onclick="Cambiar('libros')">
             <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
             <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
-            <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="">
-            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="">
+            <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="Cambiar('biblioteca_prestamos')">
+            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
             <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
         </div>
 
@@ -32,8 +32,8 @@
             <table id="tbl_mis_prestamos" border="1">
                 <thead>
                     <th class="th_numero">#</th>
-                    <th class="th">Codigo</th>
-                    <th class="th">Libro</th>
+                    <th class="th" >Codigo</th>
+                    <th class="th" style="width: 250px;">Libro</th>
                     <th class="th">Autor</th>
                     <th class="th">Tema</th>
                     <th class="th">Prestamo</th>
@@ -46,7 +46,9 @@
             </table>
         </div>
     </div>
-
+    
+    <!-- Dependencias  -->
+    <script src="biblioteca.js"></script>
 </body>
 
 </html>

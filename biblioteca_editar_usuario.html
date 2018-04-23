@@ -9,7 +9,7 @@
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
-    <script src="biblioteca.js"></script>
+    <script src="biblioteca.js"></script>  
     <!--<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>-->
 </head>
 
@@ -99,6 +99,7 @@
             </div>
         </div>
     </div>
+    
     <script>
         var activo = JSON.parse(localStorage.getItem("Usuario Activo"));
         var usuarios = JSON.parse(localStorage.getItem("usuarios"));
@@ -123,17 +124,18 @@
         $("#txt_nacimiento").val(usuarios[pos_usuario].fecha_de_nacimiento);
         $("#txt_cui").val(usuarios[pos_usuario].cui);
         InsertarDepartamentos();
-        // InsertarMunicipios();
         $("#slc_departamento").val(usuarios[pos_usuario].departamento);
+        InsertarMunicipios();
         $("#slc_municipio").val(usuarios[pos_usuario].municipio);
         $("#txt_zona").val(usuarios[pos_usuario].zona);
         if (usuarios[pos_usuario].escolaridad != null){
             $("#slc_escolaridad").val(usuarios[pos_usuario].escolaridad)
-            $("#txt_institucion").val(usuarios[pos_usuario].institucion_educativa)
+            $("#txt_institucion").val(usuarios[pos_usuario].instucion_educativa)
         }
 
         
     </script>
+    
 
 </body>
 
