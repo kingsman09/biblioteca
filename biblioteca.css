@@ -1,0 +1,341 @@
+.diseno {
+    width: 850px;
+    height: 550px;
+    border: 3px solid blue;
+    border-radius: 5px;
+   padding: 10px;
+    
+}
+
+#div_registro_usuario{
+    width: 630px;
+}
+
+
+#primera_columna, #segunda_columna {
+   width: 300px;
+   float: left;
+   /* margin-left: 100px; */
+   
+}
+
+.texto{
+    display: block;
+    margin-top: 10px;
+    width: 150px;
+    height: 20px;
+    
+}
+
+.label {
+   float: left;
+   margin-top:8px;
+   width: 100px;
+   height: 15px;
+
+}
+
+.contrasena_valida {
+    background: green;
+    font-size: 20px; 
+    width: 125px;
+}
+
+/*                     
+    pagina de terminos y condiciones
+*/
+
+#contenido {
+    height: 400px;
+    overflow: auto;
+}
+
+
+#terminos {
+    border: solid gray 2px;
+    height: 450px;
+    width: 700px;
+    margin-left: 200px;
+}
+
+.test-top {
+    background: gray;
+    font-size: 25px;
+}
+
+
+/*   LOGIN DE BIBLIOTECA   */ 
+
+#div_login {
+    height: 300px;
+    width: 420px;
+    border-radius: 5px;
+    background: cadetblue;
+}
+
+.alinear {
+    margin-top: 12px;
+    display: block;
+}
+
+.boton {
+    font-size: 18px;
+    width: 180px;
+    height: 25px;
+}
+
+
+/*      
+    LOGIN DE BIBLIOTECA
+*/
+
+#encabezado {
+    margin-top: 25px;
+    background: gray;
+    padding: 0;
+    margin: 0;
+    color: #ffffff;
+    height: 25px;
+    font-size: 20px;
+}
+
+#div_botones {
+    float: right;
+    width: 100%;
+}
+
+
+.botones{
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    margin: 0;
+    margin-bottom: 50px;
+    margin-top: 25px;
+}
+
+#div_libros_disponibles {
+   
+    width: 95%;
+    /* margin-bottom: 15px; */
+}
+
+#div_libros {
+    padding: 0;
+}
+
+.texto_login{
+    float: left;
+    text-align: left;
+    margin-top: 25px;
+    width: 22%;
+    font-size: 30px;
+    margin-left: 15px;
+}
+
+
+
+.siguiente {
+    margin: 0 60px;
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    margin: 0 50px;
+}
+
+
+/* 
+    PAGINA DE AGREGAR LIBRO
+*/
+
+#div_ingresar_libros {
+    padding: 0;
+}
+
+.libro_agregar {
+    font-size: 18px;
+    margin-left: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.texto_insertar{
+    display: block;
+    margin-top: 10px;
+    width: 150px;
+    height: 20px;
+    padding: 0;
+    
+}
+
+
+.label_insertar {
+   float: left;
+   margin-top:7px;
+   width: 100px;
+   height: 15px;
+}
+
+#div_insertar_libro {
+    width: 300px;
+    margin-left: 250px;
+    margin-top: 30px;
+}
+
+.botones_ingresar {
+    margin-top: 50px;
+    margin: 0 60px;
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    margin-left: 180px;
+}
+
+#div_botones_ingresar {
+    margin-top: 30px;
+}
+
+/*  Ventana Autores Disponibles */
+#div_autores_disponible {
+    float: left;
+    width: 95%;
+    margin-bottom: 25px;
+}
+
+/*  
+    Ventana Agregar autores
+*/
+
+#div_agregar {
+    width: 400px;
+    margin-left: 100px;
+    margin-top: 30px;
+}
+
+
+.fecha_ {
+    margin-top: 10px;
+    width: 25px;
+    height: 15px;
+}
+.genero_autor {
+    margin-top: 5px;
+    margin-bottom: 25px;
+    display: inline;
+}
+
+
+
+/*
+-----------------------------------------------
+*/
+
+.autor_numero, .tema_numero{
+    float: left;
+    width: 3%;
+    border: black solid 1px;
+    text-align: center;
+}
+
+.nombre_autor, .fecha_ingreso_tema{
+    float: left;
+    width: 20%;
+    border: black solid 1px;
+    text-align: center;
+}
+
+#botones_libros, #botones_prestar_libros{
+    margin-top: 25px;
+}
+
+/*---------------------------------------------*/
+
+.apellido_autor, .nacionalidad_autor,.ingreso_autor,
+.operaciones_autor{
+    float: left;
+    width: 15%;
+    border: black solid 1px;
+    text-align: center;
+}
+
+/*---------------------------------------------*/
+
+.nombre_tema{
+    float: left;
+    width: 28%;
+    border: black solid 1px;
+    text-align: center;
+}
+
+
+.operaciones_tema{
+    float: left;
+    width: 18%;
+    border: black solid 1px;
+    text-align: center;
+}
+
+#div_tabla_temas{
+    width: 90%;
+    height: 280px;
+}
+
+
+#div_tabla_libros{
+    width: 92%;
+    height: 280px;
+}
+
+
+#div_tabla_autores{
+    width: 100%;
+    height: 280px;
+}
+
+/* configuracion tablas*/
+
+.tbl_libros {
+    width: 100%;
+}
+
+.tbl_temas{
+width: 78%;
+}
+
+.tbl_autores {
+    width: 84.5%;
+}
+
+.clasificacion {
+    display: block;
+    border: solid 1px black;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+}
+
+#div_prestar_libro{
+    width: 500px; 
+    height: 350px; 
+    margin-top:90px;
+    margin-left: 230px;
+}
+
+/* Ventana de prestamos*/
+
+#div_tabla_prestamos{
+    width: 99%;
+    height: 300px;
+    border: solid black 1px;
+    float: left;
+}
+
+.th{
+    width: 115px;
+}
+
+.th_numero{
+    width: 15px;
+}
+
+
+

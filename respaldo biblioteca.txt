@@ -1,0 +1,198 @@
+function Editar(_pagina, _indice) {
+    var encontrado = false;
+    localStorage.setItem("posicion", _indice);
+    if (_pagina == 1) {
+        location.href = "biblioteca_editar_libro.html"
+    }
+    if (_pagina == 2) {
+        location.href = "biblioteca_editar_tema.html";
+    }
+    if (_pagina == 3) {
+        location.href = "biblioteca_editar_autor.html";
+    }
+
+}
+
+// funcion que validara que todos los datos ingresados esten correctos para asi proceder a editar un tema 
+// y los datos ya editados se sobrescribiran en el tema que selecciono el usuario y asi poder actualizarlos en la tabla
+// function EditarTema() {
+
+//     var editar_tema = $("#txt_nombre_tema").val();
+//     var posicion = localStorage.getItem("posicion");
+//     var error = false;
+//     var mensaje = "";
+//     if (editar_tema == "") {
+//         error = true;
+//         mensaje += "Tema no puede estar vacio";
+//     }
+
+//     if (error) {
+//         alert(mensaje);
+//     } else {
+//         var tema_editado = JSON.parse(localStorage.getItem("temas"));
+//         tema_editado[posicion].nombre_tema = editar_tema;
+//         var tema_str = JSON.stringify(tema_editado);
+//         localStorage.setItem("temas", tema_str);
+//         alert("archivo modificado");
+
+//     }
+// }
+
+// // funcion que validara que todos los datos ingresados esten correctos para asi poder editar correctamente el libro que se selecciono 
+// function EditarLibros() {
+//     var error = false;
+//     var mensaje = "";
+//     var posicion = localStorage.getItem("posicion");
+
+//     if ($("#txt_titulo_editar").val() == "" || $("#txt_existencia").val() == "" || $("#txt_ubicacion").val() == "") {
+//         error = true;
+//         mensaje += "\ntodos los campos deben estar llenos para continuar";
+//     }
+
+//     if (error) {
+//         alert(mensaje);
+//     } else {
+//         var libro_editado = JSON.parse(localStorage.getItem("libros"));
+//         libro_editado[posicion].titulo = $("#txt_titulo_editar").val();
+//         libro_editado[posicion].autor_id = $("#slc_autor").val();
+//         libro_editado[posicion].tema_libro = $("#slc_tema").val();
+//         libro_editado[posicion].disponibles = $("#txt_existencia").val();
+//         libro_editado[posicion].ubicacion = $("#txt_ubicacion").val();
+
+//         var libro_str = JSON.stringify(libro_editado);
+//         localStorage.setItem("libros", libro_str);
+//         alert("libro_modificado");
+//         location.href = "libros.html"
+//     }
+// }
+
+// // funcion que validara que todos los datos ingresados esten correctos para asi poder editar correctamente el autor seleccionado
+// //  y actualizarlo en las tablas correspondientes
+// function EditarAutor() {
+//     var error = false;
+//     var mensaje = "";
+//     var posicion = localStorage.getItem("posicion");
+
+//     if ($("#txt_autor_nombre").val() == "" || $("#txt_apellido_autor").val() == "") {
+//         error = true;
+//         mensaje += "\ntodos los campos deben estar llenos para continuar";
+//     }
+//     if ($("#txt_dia_nacimiento_autor").val() == "" || $("#txt_mes_nacimiento_autor").val() == "" || $("#txt_anio_nacimiento_autor").val() == "") {
+//         error = true;
+//         mensaje += "\nTodos los campos de fecha nacimiento deben estar llenos";
+//     }
+//     else {
+//         if (!(ValidarFecha(1))) {
+//             error = true;
+//             mensaje += mensaje_error;
+//         } else {
+//             mensaje += "\nfecha valida";
+//         }
+//     }
+
+//     if ($("#txt_dia_fallecimiento_autor").val().length > 0 || $("#txt_mes_fallecimiento_autor").val().length > 0 || $("#txt_anio_fallecimiento_autor").val().length > 0) {
+//         if ($("#txt_dia_fallecimiento_autor").val() == "" || $("#txt_mes_fallecimiento_autor").val() == "" || $("#txt_anio_fallecimiento_autor").val() == "") {
+//             error = true;
+//             mensaje += "\nDebe llenar todos los campos de fecha de fallecimiento";
+//         } else {
+//             if (!(ValidarFecha(2))) {
+//                 error = true;
+//                 mensaje += mensaje_error;
+//             } else {
+//                 mensaje += "\nFecha valida"
+//             }
+//         }
+//     }
+//     if (error) {
+//         alert(mensaje);
+//     } else {
+//         var autores = JSON.parse(localStorage.getItem("autores"));
+
+//         autores[posicion].nombre = $("#txt_autor_nombre").val();
+//         autores[posicion].apellido = $("#txt_autor_apellido").val();
+//         autores[posicion].nacionalidad = $("#slc_autor_nacionalidad").val();
+//         autores[posicion].genero = $("input:radio[name=rad_genero]:checked").val();
+//         autores[posicion].nacimiento = $("#txt_dia_nacimiento_autor").val() + "/" + $("#txt_mes_nacimiento_autor").val() + "/" + $("#txt_anio_nacimiento_autor").val();
+//         if ($("#txt_dia_fallecimiento_autor").val() != "") {
+//             autores[posicion].fallecimiento = $("#txt_dia_fallecimiento_autor").val() + "/" + $("#txt_mes_fallecimiento_autor").val() + "/" + $("#txt_anio_fallecimiento_autor").val();
+//         }
+
+//         var autores_str = JSON.stringify(autores);
+//         localStorage.setItem("autores", autores_str);
+//         alert("autor modificado");
+//         location.href = "biblioteca_autores_disponibles.html";
+//     }
+
+// }
+
+// funcion que eliminara el elemento seleccionado 
+// teniendo como parametro el un tipo y un indice
+// el tipo servira para saber que elemento fue el que selecciono si fue autor, tema o libro y segun el tipo
+// se eliminara el elemento del arreglo correspondiente
+// el indice para saber la posicion y el elemento que se eliminar del arreglo correspidiente al tipo antes mencionado
+function Eliminar(_tipo, _indice) {
+
+
+    var libros = JSON.parse(localStorage.getItem("libros"));
+    if (_tipo == 1) {
+        if (confirm("Desea eliminar este elemento")) {
+            var error = false;
+            var temas = JSON.parse(localStorage.getItem("temas"));
+            if (libros != null) {
+                $.each(libros, function (index, libro) {
+                    if (temas[_indice].tema_id == parseInt(libro.tema_libro)) {
+                        error = true;
+                    }
+                });
+            }
+            if (error) {
+                alert("debe eliminar primero el libro que contenga este tema");
+            } else {
+                temas.splice(_indice, 1);
+                var numero_tema = JSON.parse(localStorage.getItem("posicion_tema"));
+                numero_tema -= 1;
+                localStorage.setItem("posicion_tema", numero_tema);
+                var temas_str = JSON.stringify(temas);
+                localStorage.setItem("temas", temas_str);
+                location.href = "biblioteca_temas.html";
+            }
+        }
+    }
+
+    if (_tipo == 2) {
+        if (confirm("Desea eliminar este autor")) {
+            var error = false;
+            var autores = JSON.parse(localStorage.getItem("autores"));
+            if (libros != null) {
+                $.each(libros, function (index, autor) {
+                    if (autores[_indice].autor_id == autor.autor_id) {
+                        error = true;
+                    }
+                });
+            }
+            if (error) {
+                alert("debe eliminar primero el libro que contenga este autor");
+            } else {
+                autores.splice(_indice, 1);
+                var numero_autor = JSON.parse(localStorage.getItem("posicion_autor"));
+                numero_autor -= 1;
+                localStorage.setItem("posicion_autor", numero_autor);
+                var autor_str = JSON.stringify(autores);
+                localStorage.setItem("autores", autor_str);
+                location.href = "biblioteca_autores_disponibles.html";
+            }
+        }
+    }
+    if (_tipo == 3) {
+        if (confirm("Desea eliminar este libro")) {
+            libros.splice(_indice, 1);
+            var numero_libro = JSON.parse(localStorage.getItem("numero_libro"));
+            numero_libro -= 1;
+            localStorage.setItem("posicion_libro", numero_libro);
+            var libro_str = JSON.stringify(libros);
+            localStorage.setItem("libros", libro_str);
+            location.href = "libros.html";
+        }
+    }
+}
+

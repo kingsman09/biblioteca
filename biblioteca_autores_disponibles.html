@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Autores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
+    <script src="jquery.min.js"></script>
+    <script src="toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
+    <script src="biblioteca.js"></script>
+</head>
+
+<body>
+
+    <div id="div_autores" class="diseno">
+        <div id="encabezado"> Autores</div>
+
+        <div id="div_botones">
+            <label class="texto_login">Biblioteca</label>
+            <input type="button" id="btn_libros" class="botones" value="Libros" onclick="Cambiar('libros')">
+            <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
+            <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
+            <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="">
+            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="">
+            <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
+        </div>
+        <div id="div_autores_disponibles">
+           
+            
+        </div>
+        <br>
+
+        <div>
+            <div class="autor_numero"> #</div>
+            <div class="nombre_autor">Nombres</div>
+            <div class="apellido_autor">Apellidos</div>
+            <div class="nacionalidad_autor">Nacionalidad</div>
+            <div class="ingreso_autor">Fecha de ingreso</div>
+            <div class="operaciones_autor">Operaciones</div>
+        </div>
+        <div id="div_tabla_autores">
+
+        </div>
+
+        <div id="div_botones_ingresar_autor">
+            <center>
+                <input type="button" id="boton_temas" value="Anterior" class="siguiente" onclick="OcultarTabla(2,3)">
+                <input type="button" value="Siguiente" class="siguiente" onclick="OcultarTabla(1,3)">
+            </center>
+        </div>
+    </div>
+
+    <script>
+    var usuario_login = localStorage.getItem("Usuario Activo");
+    if (usuario_login<1){
+        location.href = "biblioteca_login.html";
+    };
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Crear Usuario</title>
+    <script src="jquery.min.js"></script>
+    <script src="toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
+    <script src="biblioteca.js"></script>
+</head>
+
+<body>
+    <div id="div_registro_usuario" class="diseno">
+        <center>
+            <h2>Nuevo Usuario</h2>
+        </center>
+        <a href="biblioteca_login.html">Ya tiene cuenta? inicie sesion aqui</a> &#160
+        <a href="..\jason javier escobar gomez\biblioteca_login.html">Inicie sesion como administrador aqui</a>
+        <div id="contenedor">
+            <div id="primera_columna">
+
+                <br>
+                <label class='label'> Nombres</label>
+                <input type="text" id="txt_nombre" class="texto" onkeypress="return ValidarNumero(event, 1)">
+                <label class="label"> Apellidos</label>
+                <input type="text" id="txt_apellido" class="texto" onkeypress="return ValidarNumero(event, 1)">
+                <label class="label"> Direccion</label>
+                <input type="text" id="txt_direccion" class="texto">
+                <label class="label"> Telefono</label>
+                <input type="text" id="txt_telefono" class="texto" minlength="8" maxlength="8" onkeypress="return ValidarNumero(event, 0)">
+                <label class="label">Correo</label>
+                <input type="text" id="txt_correo" class="texto">
+                <label class="label"> Contrasena</label>
+                <input type="password" id="txt_contrasena" class="texto" minlength="8">
+                <label class="label"> Confirme su
+                    <br> contrasena</label>
+                <input type="password" id="txt_confirmar_contrasena" class="texto item">
+
+                <br>
+                <br>
+                <label class="item"> Genero</label>
+                <br>
+                <label>Masculino</label>
+                <input type="radio" name="rad_genero" id="rad_masculino" class="genero" value="1">
+                <label>Femenino</label>
+                <input type="radio" name="rad_genero" id="rad_femenino" class="genero" value="2">
+                <br>
+                <br>
+                <label class="label"> Fecha de nacimiento</label>
+                <input type="date" id="txt_nacimiento" class="texto" placeholder="formato dia/mes/año">
+                <br>
+                <label class="label">CUI</label>
+                <input type="text" id="txt_cui" maxlength="13" minlength="13" class="texto" onkeypress="return ValidarNumero(event, 0)">
+                <br>
+            </div>
+            <div id="segunda_columna">
+                <br>
+
+                <label class="label">Departamento</label>
+                <select id="slc_departamento" class="texto" onchange="InsertarMunicipios();"></select>
+                <br>
+                <label class="label">Municipio</label>
+                <select id="slc_municipio" class="texto"></select>
+                <br>
+                <label class="label" style="margin-top: 1px">Zona </label>
+                <input type="text" id="txt_zona" class="texto" onkeypress="return ValidarNumero(event, 0)" style="margin-top: 1px">
+                <label class="label" style="margin-top: 9px;">Institucion educativa</label>
+                <input type="text" id="txt_institucion" class="texto" onkeypress="return ValidarNumero(event, 1)" style="margin-top: 15px; ">
+                <label class="label arreglar" style="margin-top: 20px">Escolaridad</label>
+                <select id="slc_escolaridad" class="texto" style="margin-top: 20px">
+                    <option value="0">ninguna</option>
+                    <option value="1">primaria</option>
+                    <option value="2">basicos</option>
+                    <option value="3">diversificado</option>
+                    <option value="4">universidad</option>
+                    <option value="5">postgrados</option>
+                    <option value="6">doctorados</option>
+                </select>
+
+                <input type="file" id="btn_insertar_foto" class="texto" onchange="leerArchivo()" style="margin-top: 10px; margin-bottom: 10px;float: left;">
+                <div id="foto">
+
+                </div>
+                <br>
+                <br>
+                <br>
+
+                <a href="javascript:AbrirTerminos(1);">Terminos y condiciones de uso
+
+                </a>
+                <br>
+                <br>
+                <input type="checkbox" id="chk_aceptar_terminos">
+                <label>Acepto terminos y condiciones</label>
+                <br>
+
+                <input type="button" id="btn_registrar" value="Registrar" class="texto" onclick="Validaciones()">
+            </div>
+        </div>
+    </div>
+      
+
+
+</body>
+
+</html>

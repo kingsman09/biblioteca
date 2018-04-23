@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Agregar Autores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
+    <script src="jquery.min.js"></script>
+    <script src="toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
+    <script src="biblioteca.js"></script>
+
+</head>
+</head>
+
+<body>
+    <div id="div_agregar_autores" class="diseno">
+        <div id="encabezado"> Nuevo Autor</div>
+
+        <div id="div_botones">
+            <label class="texto_login">Biblioteca</label>
+            <input type="button" id="btn_libros" class="botones" value="Libros" onclick="Cambiar('libros')">
+            <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
+            <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
+            <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir();">
+        </div>
+
+        <div id="div_agregar">
+            <label class="label">Nombres</label>
+            <input type="text" id="txt_autor_nombre" class=texto>
+            <label class="label">Apellido</label>
+            <input type="text" id="txt_autor_apellido" class=texto>
+            <label class="label">Nacionalidad</label>
+            <select id="slc_autor_nacionalidad" class=texto></select>
+            <br>
+            <label class="label">Genero</label>
+
+            <label class="genero_autor">M</label>
+            <input type="radio" name="rad_genero" value="1" class="genero_autor">
+            <label class="genero_autor">F</label>
+            <input type="radio" name="rad_genero" value="2" class="genero_autor">
+            <br>
+            <label class="label">Fecha de nacimiento</label>
+            <input type="text" id="txt_dia_nacimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <input type="text" id="txt_mes_nacimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <input type="text" id="txt_anio_nacimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <br>
+            <br>
+            <label class="label">Fecha de fallecimiento</label>
+            <input type="text" id="txt_dia_fallecimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <input type="text" id="txt_mes_fallecimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <input type="text" id="txt_anio_fallecimiento_autor" class="fecha_" onkeypress="return ValidarNumero(event, 0);">
+            <br>
+            <br>
+            <label class="label">Fecha de ingreso</label>
+            <input type="text" id="txt_autor_fecha_ingreso" class="fecha_ingreso txt_agregar_autor">
+        </div>
+        <div id="div_botones_ingresar">
+            <input type="button" id="btn_regresar" value="Regresar" class="botones_ingresar">
+            <input type="button" id="btn_ingresar_libro" value="Ingresar" class="botones_ingresar" onclick="AgregarAutor();">
+        </div>
+    </div>
+    <script>
+        InsertarPais();
+        var usuario_login = localStorage.getItem("Activo");
+        if (usuario_login < 1) {
+            location.href = "biblioteca_login.html";
+        };
+    </script>
+</body>
+
+</html>

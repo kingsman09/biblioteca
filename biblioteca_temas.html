@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
+    <script src="jquery.min.js"></script>
+    <script src="toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
+    <script src="biblioteca.js"></script>
+</head>
+
+<body>
+    <div id="div_agregar_temas" class="diseno">
+        <div id="encabezado"> Temas</div>
+
+        <div id="div_botones">
+            <label class="texto_login">Biblioteca</label>
+            <input type="button" id="btn_libros" class="botones" value="Libros" onclick="Cambiar('libros')">
+            <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
+            <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
+            <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="">
+            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="">
+            <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
+
+        </div>
+        <div id="div_temas_disponibles">
+            
+        </div>
+        <br>
+
+        <div>
+            <div class="tema_numero"> #</div>
+            <div class="nombre_tema">Tema</div>
+            <div class="fecha_ingreso_tema">Fecha de ingreso</div>
+            <div class="operaciones_tema">Operaciones</div>
+        </div>
+        <div id="div_tabla_temas">
+
+        </div>
+        <div id="div_botones_ingresar_temas">
+            <center>
+                <input type="button" value="Anterior" class="siguiente" onclick="OcultarTabla(2,2 )">
+                <input type="button" value="Siguiente" class="siguiente" onclick="OcultarTabla(1,2)">
+            </center>
+        </div>
+    </div>
+
+    <script>
+        var usuario_login = localStorage.getItem("Usuario Activo");
+        if (usuario_login < 1) {
+            location.href = "biblioteca_login.html";
+        };
+    </script>
+
+</body>
+
+</html>
