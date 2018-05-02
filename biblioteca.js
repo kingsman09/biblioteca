@@ -1175,7 +1175,7 @@ function InsertarTemas() {
 function MostrarTemas(_pagina) {
     var temas = JSON.parse(localStorage.getItem("temas"));
     var tabla = "";
-    var filas = 2;
+    var filas = 8;
 
     const inicio = (_pagina * filas) - filas;
     const final = (_pagina * filas);
@@ -1192,7 +1192,7 @@ function MostrarTemas(_pagina) {
                 tabla += "<tr>" +
                     "<td class='numero'>" + (index + 1) + "</td>" +
                     "<td class='nombre'>" + valor.nombre_tema + "</td>" +
-                    "<td class='operaciones'><a href>Ver</a></td>" +
+                    "<td class='operaciones'><a href='javascript:VerTema("+ valor.tema_id +")'>Ver</a></td>" +
                     "</tr>";
             }
         });
@@ -1207,7 +1207,7 @@ function MostrarTemas(_pagina) {
                             ${final < temas.length ? `onclick="MostrarTemas(${_pagina + 1})"` : ''}
                             class="btn btn-outline-success"></div>
                             </div>`;
-        const numero = `<div><p class='text-center'>Del ${inicio + 1} al ${final} de ${temas.length}</p></div>`
+        const numero = `<div><p class='text-center'>Del ${inicio + 1} al ${temas.length} de ${temas.length}</p></div>`
         $("#div_botones_ingresar_temas").html(regresar + numero + siguiente);
     } else {
         console.log("Aun no hay ningun libro ingresado");
@@ -1266,8 +1266,6 @@ function MostrarLibros(_pagina) {
                         "</tr>";
                 }
             }
-
-
         });
 
         $("#tb_insertar_tabla").html(tabla);
@@ -1292,7 +1290,7 @@ function MostrarLibros(_pagina) {
 function MostrarAutores(_pagina) {
     var autor = JSON.parse(localStorage.getItem("autores"));
     var tabla = "";
-    var filas = 2;
+    var filas = 8;
     const inicio = (_pagina * filas) - filas;
     const final = (_pagina * filas)
 
@@ -1309,7 +1307,7 @@ function MostrarAutores(_pagina) {
                     "<td>" + valor.apellido + "</td>" +
                     "<td>" + valor.nacionalidad + "</td>" +
                     "<td>" + valor.nacimiento + "</td>" +
-                    "<td>&#160<a href>Ver</a></td>" +
+                    "<td>&#160<a href='javascript:VerAutor("+ valor.autor_id +")'>Ver</a></td>" +
                     "</tr>";
             }
         })
@@ -1641,23 +1639,6 @@ function MostrarPrestamos(_pagina) {
     }
 }
 
-/* function FiltrarHistorial() {
-     var libros = JSON.parse(localStorage.getItem("libros"));
-     var autores = JSON.parse(localStorage.getItem("autores"));
-   var temas = JSON.parse(localStorage.getItem("temas"));
-     var prestamos = JSON.parse(localStorage.getItem('prestamos'));
-     switch(parseInt($("#slc_busqueda_historial").val())){
-         case 0:
-             var lista = prestamos.filter(value => {
-                 var nom_codigo = value.token;
-                 var codigo_buscar = $("#txt_busqueda_historial").val()
-                 return nom_codigo.indexOf(codigo_buscar) >-1;
-             });
-             break;
-     }
-     return lista;
-}*/ 
-
 
 function CalcularTiempo() {
     let prestamos = JSON.parse(localStorage.getItem('prestamos'))
@@ -1881,7 +1862,9 @@ function GuardarCambiosPerfil() {
         usuarios[posicion_actual].apellido = apellido;
         usuarios[posicion_actual].direccion = direccion;
         usuarios[posicion_actual].telefono = telefono;
-
+        if ($("btn_insertar_foto").val() != ""){
+            usuarios[posicion_actual].perfil = imagen;
+        }
         usuarios[posicion_actual].genero = genero;
         usuarios[posicion_actual].fecha_de_nacimiento = nacimiento_fecha;
         usuarios[posicion_actual].departamento = departamento
@@ -1932,3 +1915,30 @@ function FiltrarAutores() {
 }
 
 
+function VerAutor(_numero){
+    var libros = JSON.parse(localStorage.getItem('libros'));
+    
+    var arreglo = [];
+    libros.forEach(libro => {
+        if (_numero == libro.autor_id){
+            arreglo.push(libro);
+        }
+    })
+    localStorage.setItem('ver libro', JSON.stringify(arreglo))
+    location.href = "biblioteca_ver_libros.html";
+
+}
+
+function VerTema(_numero){
+    var libros = JSON.parse(localStorage.getItem('libros'));
+
+    var nuevos_temas = [];
+
+    libros.forEach(libro => {
+        if (_numero == libro.tema_libro){
+            nuevos_temas.push(libro);
+        }
+        localStorage.setItem('ver tema', JSON.stringify(nuevos_temas))
+        location.href = "biblioteca_ver_temas.html";
+    })
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
+    <script src="jquery.min.js"></script>
+    <script src="toastr.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" -->
+    <!-- crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" -->
+    <!-- crossorigin="anonymous"></script> -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="moment-with-locales.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script> -->
+
+
+</head>
+
+<body>
+
+    <div id="div_libros" class="container p-1">
+        <div id="encabezado"> Libros</div>
+
+        <div id="div_botones" class="container p-3 row">
+            <div class="col-3">
+                <label class="texto_login">Biblioteca</label>
+            </div>
+            <div class="col">
+                <input type="button" id="btn_libros" class="btn btn-primary " value="Libros" onclick="Cambiar('libros')">
+                <input type="button" id="btn_autores" class="btn btn-outline-success " value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
+                <input type="button" id="btn_temas" class="btn btn-primary" value="Temas" onclick="Cambiar('biblioteca_temas')">
+                <input type="button" id="btn_prestamos" class="btn btn-outline-success" value="Prestamos" onclick="Cambiar('biblioteca_prestamos')">
+                <input type="button" id="btn_perfil" class="btn btn-outline-success" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
+                <input type="button" id="btn_salir" class="btn btn-outline-warning" value="Salir" onclick="Salir()">
+            </div>
+        </div>
+        <div id="div_libros_disponibles">
+            <label>Buscar por:</label>
+            <select id="slc_buscar_libro">
+                <option value="1">Libro</option>
+                <option value="2">Autores</option>
+                <option value="3">Temas</option>
+            </select>
+            <input type="text" id="txt_buscar_libro">
+            <input type="button" value="buscar" id="btn_buscar_libro" onclick="MostrarLibros(1)">
+        </div>
+        <br>
+        <div class="container p-4">
+            <table border="1" id="tabla_libros" class="table table-hover p-5">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Titulo</th>
+                        <th>Auto</th>
+                        <th>Tema</th>
+                        <th>Ubicacion</th>
+                        <th>Disponibles</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tb_insertar_tabla">
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="botones_libros" class="container text-center">
+
+        </div>
+    </div>
+    <script>
+
+
+        var usuario_login = localStorage.getItem("Usuario Activo");
+        if (usuario_login < 1) {
+            location.href = "biblioteca_login.html";
+        };
+    </script>
+    <script src="biblioteca.js"></script>
+    <script>
+
+        MostrarLibros(1);
+        function MostrarLibros(_pagina) {
+
+
+            var arreglo = JSON.parse(localStorage.getItem('ver libro'));
+            var libros = JSON.parse(localStorage.getItem("libros"));
+            var autores = JSON.parse(localStorage.getItem("autores"));
+            var temas = JSON.parse(localStorage.getItem("temas"));
+            var posicion = JSON.parse(localStorage.getItem('posicion'))
+            var autor_nombre = "";
+            var tema_nombre = "";
+            var tabla = "";
+            var filas = 4;
+            const inicio = (_pagina * filas) - filas;
+            const final = (_pagina * filas);
+            var list = FiltrarLibros()
+
+
+            if (libros && libros.length > 0) {
+                $.each(list, function (index, valor) {
+
+                    console.log("entra")
+                    $.each(autores, function (indice_autor, autor) {
+                        if (autor.autor_id == parseInt(valor.autor_id)) {
+                            autor_nombre = autor.nombre;
+                        }
+                        $.each(temas, function (index, tema) {
+                            if (tema.tema_id == parseInt(valor.tema_libro)) {
+                                tema_nombre = tema.nombre_tema;
+                            }
+                        });
+                    });
+
+                    if (index >= inicio && index < final) {
+                        tabla += `<tr> 
+                            <td>  ${(index + 1)} </td> 
+                            <td>  ${valor.titulo}  </td> 
+                            <td>  ${autor_nombre}e  </td> 
+                            <td>  ${tema_nombre}  </td> 
+                            <td>  ${valor.ubicacion}  </td> 
+                            <td>  ${valor.disponibles}  </td>`
+                        if (valor.disponibles > 0) {
+                            tabla += `<td><a href='javascript:PrestarLibro( ${valor.id_libro })'>Prestar</a></td>
+                                </tr>`;
+                        } else {
+                            tabla += `<td class='operaciones_libro libro_operacion'>no disponible</td> +
+                                </tr>`;
+                        }
+                    };
+
+                });
+                $("#tb_insertar_tabla").html(tabla);
+                const regresar = `<label><input type="button" value="Anterior" 
+                                    ${inicio > 0 ? `onclick="MostrarLibros(${_pagina - 1})"` : ''}>
+                                    </label>`;
+
+                const siguiente = `<label><input type="button" value="siguiente" 
+                                    ${final < list.length ? `onclick="MostrarLibros(${_pagina + 1})"` : ''}>
+                                    </label>`;
+
+                const numero = `<label>del ${inicio + 1} al  ${list.length <= filas ? `${list.length}` : final} de ${list.length}</label>`
+                $('#botones_libros').html(regresar + numero + siguiente)
+
+            }
+        }
+
+        function FiltrarLibros() {
+            var arreglo = JSON.parse(localStorage.getItem("ver libro"));
+            var autores = JSON.parse(localStorage.getItem("autores"));
+            var temas = JSON.parse(localStorage.getItem("temas"));
+
+            console.log($("#slc_buscar_libro").val());
+
+
+            switch (parseInt($("#slc_buscar_libro").val())) {
+                case 1:
+                    var lista = arreglo.filter(function (value) {
+                        let titulo = value.titulo;
+                        let titulo_buscar = $("#txt_buscar_libro").val();
+                        return titulo.indexOf(titulo_buscar) > -1;
+                    })
+                    break;
+                case 2:
+                    var busqueda = autores.filter(function (value) {
+                        let nombre = value.nombre;
+                        console.log(nombre)
+                        let nombre_buscar = $("#txt_buscar_libro").val();
+                        return nombre.indexOf(nombre_buscar) > -1;
+                    });
+                    var lista = [];
+                    $.each(arreglo, function (indice, libro) {
+                        $.each(busqueda, function (index, autor) {
+                            if (autor.autor_id == libro.autor_id) {
+                                lista.push(libro)
+                            }
+                        });
+                    });
+                    break;
+                case 3:
+                    let buscar_tema = temas.filter(function (value) {
+                        let nombre = value.nombre_tema;
+                        let nombre_buscar = $("#txt_buscar_libro").val();
+                        return nombre.indexOf(nombre_buscar) > -1;
+                    });
+                    var lista = [];
+                    $.each(arreglo, function (indice, libro) {
+                        $.each(buscar_tema, function (index, tema) {
+                            if (tema.tema_id == libro.tema_libro) {
+                                lista.push(libro);
+                            }
+                        });
+                    });
+                    break
+            }
+            console.log(lista)
+            return lista;
+        }
+
+    </script>
+</body>
+
+</html>

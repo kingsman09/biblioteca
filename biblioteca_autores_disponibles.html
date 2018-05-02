@@ -28,17 +28,17 @@
             <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
             <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
         </div>
-       
+
         <div id="div_autores_disponibles">
-                <label>Buscar por:</label>
-                <select id="slc_buscar_autor">
-                    <option value="1">Nombre</option>
-                    <option value="2">Apellido</option>
-                    <option value="3">Nacionalidad</option>
-                </select>
-                <input type="text" id="txt_buscar_autor">
-                <input type="button" value="buscar" id="btn_buscar_tema" onclick="MostrarAutores(1)">
-            </div>
+            <label>Buscar por:</label>
+            <select id="slc_buscar_autor">
+                <option value="1">Nombre</option>
+                <option value="2">Apellido</option>
+                <option value="3">Nacionalidad</option>
+            </select>
+            <input type="text" id="txt_buscar_autor">
+            <input type="button" value="buscar" id="btn_buscar_tema" onclick="MostrarAutores(1)">
+        </div>
         <div class="container">
             <table id="tabla_autores" class="table table=hover">
                 <thead class="thead-dark">
@@ -56,17 +56,18 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div id="div_botones_ingresar_autor" class="container text-center">
-           
+
         </div>
     </div>
 
     <script>
-    var usuario_login = localStorage.getItem("Usuario Activo");
-    if (usuario_login<1){
-        location.href = "biblioteca_login.html";
-    };
+        
+        var usuario_login = localStorage.getItem("Usuario Activo");
+        if (usuario_login < 1) {
+            location.href = "biblioteca_login.html";
+        };
     </script>
     <script src="biblioteca.js"></script>
 
