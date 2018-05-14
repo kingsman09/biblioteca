@@ -4,19 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Prestar Libro</title>
+    <title>Usuario</title>
     <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
-    <script src="biblioteca.js"></script>  
+    <script src="biblioteca.js"></script>
     <!--<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>-->
 </head>
 
 <body>
 
     <div id="div_libros" class="diseno">
-        <div id="encabezado"> Prestar Libros</div>
+        <div id="encabezado"> Editar Usuario</div>
 
         <div id="div_botones">
             <label class="texto_login">Biblioteca</label>
@@ -24,7 +24,7 @@
             <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
             <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
             <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="Cambiar('biblioteca_prestamos')">
-            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="">
+            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
             <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
         </div>
 
@@ -64,8 +64,8 @@
                 <br>
                 <label class="label"> Fecha de nacimiento</label>
                 <input type="date" id="txt_nacimiento" class="texto" placeholder="formato dia/mes/año">
-                
-               
+
+
             </div>
             <div id="segunda_columna">
                 <br>
@@ -92,34 +92,38 @@
                     <option value="6">doctorados</option>
                 </select>
 
-                <input type="file" id="btn_insertar_foto" class="texto" onchange="leerArchivo()" style="margin-top: 10px; margin-bottom: 10px;float: left;">
-                <div id="foto">
+                <input type="file" id="btn_insertar_foto" class="texto" onchange="leerArchivo()" accept="image/*" style="margin-top: 10px; margin-bottom: 10px;float: left;">
+                <br><br>
+                <br>
+                <input type="button" id="btn_guardar_perfil" value="Guardar" onclick="GuardarCambiosPerfil()">
 
-                </div>
+            </div>
+            <div id="foto">
+
             </div>
         </div>
     </div>
-    
+
     <script>
         var activo = JSON.parse(localStorage.getItem("Usuario Activo"));
         var usuarios = JSON.parse(localStorage.getItem("usuarios"));
         var pos_usuario;
-        $.each(usuarios, function(index, usuario){
-            if (usuario.id == activo){
+        $.each(usuarios, function (index, usuario) {
+            if (usuario.id == activo) {
                 pos_usuario = index;
             }
         });
-        
+
         $("#txt_nombre").val(usuarios[pos_usuario].nombre);
         $("#txt_apellido").val(usuarios[pos_usuario].apellido);
         $("#txt_direccion").val(usuarios[pos_usuario].direccion);
         $("#txt_telefono").val(usuarios[pos_usuario].telefono);
         $("#txt_correo").val(usuarios[pos_usuario].correo);
-        if (usuarios[pos_usuario].genero == 1){
-            $("#rad_masculino").prop("checked",true);
+        if (usuarios[pos_usuario].genero == 1) {
+            $("#rad_masculino").prop("checked", true);
         }
-        if (usuarios[pos_usuario].genero == 2){
-            $("#rad_femenino").prop("checked",true);
+        if (usuarios[pos_usuario].genero == 2) {
+            $("#rad_femenino").prop("checked", true);
         }
         $("#txt_nacimiento").val(usuarios[pos_usuario].fecha_de_nacimiento);
         $("#txt_cui").val(usuarios[pos_usuario].cui);
@@ -128,14 +132,23 @@
         InsertarMunicipios();
         $("#slc_municipio").val(usuarios[pos_usuario].municipio);
         $("#txt_zona").val(usuarios[pos_usuario].zona);
-        if (usuarios[pos_usuario].escolaridad != null){
+        if (usuarios[pos_usuario].escolaridad != null) {
             $("#slc_escolaridad").val(usuarios[pos_usuario].escolaridad)
             $("#txt_institucion").val(usuarios[pos_usuario].instucion_educativa)
         }
+        let imagd = JSON.parse(localStorage.getItem("usuarios"));
+        let insert = imagd[pos_usuario].perfil;
+        //console.log(imagd[pos_usuario].perfil);
+        let foto = document.getElementById('foto');
+        let image = document.createElement('img');
+        image.src = insert;
+        image.width = 150;
+        foto.appendChild(image);
 
-        
+
+
     </script>
-    
+
 
 </body>
 

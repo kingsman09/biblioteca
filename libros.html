@@ -8,9 +8,16 @@
     <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" -->
+        <!-- crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" -->
+        <!-- crossorigin="anonymous"></script> -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="moment-with-locales.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script>
-   
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script> -->
+
     <script>
         $(function () {
 
@@ -23,17 +30,21 @@
 
 <body>
 
-    <div id="div_libros" class="diseno">
+    <div id="div_libros" class="container p-1">
         <div id="encabezado"> Libros</div>
 
-        <div id="div_botones">
-            <label class="texto_login">Biblioteca</label>
-            <input type="button" id="btn_libros" class="botones" value="Libros" onclick="Cambiar('libros')">
-            <input type="button" id="btn_autores" class="botones" value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
-            <input type="button" id="btn_temas" class="botones" value="Temas" onclick="Cambiar('biblioteca_temas')">
-            <input type="button" id="btn_prestamos" class="botones" value="Prestamos" onclick="Cambiar('biblioteca_prestamos')">
-            <input type="button" id="btn_perfil" class="botones" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
-            <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
+        <div id="div_botones" class="container p-3 row">
+            <div class="col-3">
+                <label class="texto_login">Biblioteca</label>
+            </div>
+            <div class="col">
+                <input type="button" id="btn_libros" class="btn btn-primary " value="Libros" onclick="Cambiar('libros')">
+                <input type="button" id="btn_autores" class="btn btn-outline-success " value="Autores" onclick="Cambiar('biblioteca_autores_disponibles')">
+                <input type="button" id="btn_temas" class="btn btn-primary" value="Temas" onclick="Cambiar('biblioteca_temas')">
+                <input type="button" id="btn_prestamos" class="btn btn-outline-success" value="Prestamos" onclick="Cambiar('biblioteca_prestamos')">
+                <input type="button" id="btn_perfil" class="btn btn-outline-success" value="Perfil" onclick="Cambiar('biblioteca_editar_usuario')">
+                <input type="button" id="btn_salir" class="btn btn-outline-warning" value="Salir" onclick="Salir()">
+            </div>
         </div>
         <div id="div_libros_disponibles">
             <label>Buscar por:</label>
@@ -46,34 +57,27 @@
             <input type="button" value="buscar" id="btn_buscar_libro" onclick="MostrarLibros(1)">
         </div>
         <br>
-        <!-- <div>
-            <div class="libro_numero"> #</div>
-            <div class="nombre_libro">Libro</div>
-            <div class="autor_libro">Autor</div>
-            <div class="tema_libro">Tema</div>
-            <div class="ubicacion_libro">Ubicacion</div>
-            <div class="disponibles_libro">Disp</div>
-            <div class="operaciones_libro">Operaciones</div>
-        </div> -->
-        <table border="1" id="tabla_libros">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Titulo</th>
-                    <th>Auto</th>
-                    <th>Tema</th>
-                    <th>Ubicacion</th>
-                    <th>Disponibles</th>
-                    <th>Operaciones</th>
-                </tr>
-            </thead>
-            <tbody id="tb_insertar_tabla" class="listado">
+        <div class="container p-4">
+            <table border="1" id="tabla_libros" class="table table-hover p-5">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Titulo</th>
+                        <th>Auto</th>
+                        <th>Tema</th>
+                        <th>Ubicacion</th>
+                        <th>Disponibles</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tb_insertar_tabla" >
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
 
-        <div id="botones_libros">
+        <div id="botones_libros" class="container text-center">
             <center>
                 <!-- <input type="button" value="Anterior" class="siguiente" onclick="OcultarTabla(2,1)">
                 <input type="button" value="Siguiente" class="siguiente" onclick="OcultarTabla(1,1)"> -->
@@ -89,6 +93,7 @@
         };
     </script>
     <script src="biblioteca.js"></script>
+    <script>MostrarLibros(1)</script>
 
 </body>
 

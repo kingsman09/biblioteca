@@ -10,7 +10,10 @@
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
-    <script src="biblioteca.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <script src="moment-with-locales.min.js"></script>
+    
 </head>
 
 <body>
@@ -27,25 +30,22 @@
             <input type="button" id="btn_salir" class="botones" value="Salir" onclick="Salir()">
 
         </div>
-        <div id="div_temas_disponibles">
+        <div class="container" style="float: left">
+            <table border="1" id="tbl_temas" class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 25px">#</th>
+                        <th>Tema</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tb_insertar_temas">
+
+                </tbody>
+            </table>
+        </div>
+        <div id="div_botones_ingresar_temas" style="float: left" class="container text-center">
             
-        </div>
-        <br>
-
-        <div>
-            <div class="tema_numero"> #</div>
-            <div class="nombre_tema">Tema</div>
-            <div class="fecha_ingreso_tema">Fecha de ingreso</div>
-            <div class="operaciones_tema">Operaciones</div>
-        </div>
-        <div id="div_tabla_temas">
-
-        </div>
-        <div id="div_botones_ingresar_temas">
-            <center>
-                <input type="button" value="Anterior" class="siguiente" onclick="OcultarTabla(2,2 )">
-                <input type="button" value="Siguiente" class="siguiente" onclick="OcultarTabla(1,2)">
-            </center>
         </div>
     </div>
 

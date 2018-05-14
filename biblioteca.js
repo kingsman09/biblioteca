@@ -580,25 +580,17 @@ var paises = [
 */
 
 $(function () {
-    // InsertarDepartamentos();
-    // InsertarMunicipios();
-    MostrarTemas();
-    MostrarPrestamos(1);
-    
-    MostrarAutores();
-    $("#tabla_0").show();
-    $("#listado_0").show();
-    // $(".tbl_libros").show()
-    MostrarLibros();
+    //InsertarDepartamentos();
+    MostrarTemas(1);
+    MostrarAutores(1)
+
     $(".fecha_ingreso").val(new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + (new Date().getFullYear()));
     $(".fecha_ingreso").prop("disabled", true);
     $("#ocultar_terminos").hide();
     toastr.info("Bienvenido");
-    MostrarLibros(1)
 
+    // MostrarPrestamos(1);
 
-
-    // $("#tb_insertar_tabla").html("")
 })
 
 
@@ -678,7 +670,7 @@ function Validaciones() {
     var validar_correo = JSON.parse(localStorage.getItem("usuarios"))
     if (validar_correo && validar_correo.length > 0) {
         $.each(validar_correo, function (index, valor) {
-            if (validar_correo[index].correo == correo) {
+            if (validar_correo[index].correo.trim() == correo.trim()) {
                 error_correo = true;
             }
 
@@ -834,7 +826,7 @@ function Validaciones() {
         usuarios[numero_usuario - 1].departamento = departamento
         usuarios[numero_usuario - 1].municipio = municipio;
         usuarios[numero_usuario - 1].cui = CUI;
-        usuarios[numero_usuario - 1].correo = correo;
+        usuarios[numero_usuario - 1].correo = correo.trim();
         usuarios[numero_usuario - 1].id = numero_usuario;
         usuarios[numero_usuario - 1].zona = $("#txt_zona").val();
         usuarios[numero_usuario - 1].estado = 1;
@@ -870,28 +862,53 @@ function Validaciones() {
 
 let imagen = "";
 function leerArchivo() {
+    let usuarios = JSON.parse(localStorage.getItem('usuarios'))
+    let error = false;
+    let mensaje = "";
+    let conteo = 0;
     var inpute = document.getElementById("btn_insertar_foto");
-    if (inpute.files.length > 0) {
+    if (inpute.files.length > 0 && inpute.files.length < 2) {
         var archivo = inpute.files[0];
         console.log(archivo);
         var lector = new FileReader();
         lector.readAsDataURL(archivo);
 
-
+        let compatibles = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+        console.log(compatibles)
         lector.addEventListener("load", function () {
-            var img_result = this.result
-            //document.getElementById("contenido-archivo").value = window.btoa(img_result);
-            imagen = img_result;
+            var img_result = this.result;
+            console.log(archivo.type)
+            compatibles.forEach((tipo, indice) => {
+                if (archivo.type == tipo) {
+                    conteo += 1
+                }
+            });
+            if (conteo == 0) {
+                mensaje += 'solo son permitidas las imagenes';
+            }
+            if (archivo.size > 1e6) {
+                error = true;
+                mensaje += 'la imagen no puede pesar mas de 1mb'
+            }
+            if (error) {
+                toastr.warning(mensaje)
+            } else {
+                imagen = img_result;
+                const appContainer = document.getElementById('foto');
+                const img = document.createElement('img');
+                img.src = imagen;
+                img.width = "150";
+                $('#foto').html('')
+                appContainer.appendChild(img);
+            }
 
         });
 
         // $(".eliminar").remove()
-        const appContainer = document.getElementById('foto');
-        const img = document.createElement('img');
-        img.src = imagen;
-        img.width = "150";
-        appContainer.appendChild(img);
 
+
+    } else {
+        toastr.warning('solo puede insertar un solo archivo')
     }
 }
 
@@ -981,6 +998,7 @@ function ValidarContrasena(_dato, error, mensaje) {
             'contrasena valida'
             + '</label>');
         $(".contrasena_valida").fadeOut(6500);
+
 
     } else {
         return true;
@@ -1154,44 +1172,48 @@ function InsertarTemas() {
 // funciones que con el arreglo de temas creara y armara un tabla 
 // para poder mostrarla en el html correspondiente 
 
-function MostrarTemas() {
+function MostrarTemas(_pagina) {
     var temas = JSON.parse(localStorage.getItem("temas"));
     var tabla = "";
-    var filas = 4;
-    contador_paginas = 0;
+    var filas = 2;
+
+    const inicio = (_pagina * filas) - filas;
+    const final = (_pagina * filas);
+    console.log(inicio);
+
     if (temas && temas.length > 0) {
         console.log("si entro prro");
 
 
         $.each(temas, function (index, valor) {
-            if (index % filas == 0) { // esta operacion creara el inicio de la tabla depende el numero de filas que se desean mostrar
-                tabla += "<table border='1' id='tabla_" + contador_paginas + "' class='tbl_temas listado'>"
-
-                principio = index + 1;
-                console.log(principio);
-                console.log("si entro prro x2");
+            if (index >= inicio && index < final) {
+                console.log('pruebas')
+                // despues se insertaran filas a la tabla segun los temas ingresados y filas determindadas
+                tabla += "<tr>" +
+                    "<td class='numero'>" + (index + 1) + "</td>" +
+                    "<td class='nombre'>" + valor.nombre_tema + "</td>" +
+                    "<td class='operaciones'><a href>Ver</a></td>" +
+                    "</tr>";
             }
-            // despues se insertaran filas a la tabla segun los temas ingresados y filas determindadas
-            tabla += "<tr>" +
-                "<td class='numero'>" + (index + 1) + "</td>" +
-                "<td class='nombre'>" + valor.nombre_tema + "</td>" +
-                "<td class='fecha'>" + valor.ingreso_tema + "</td>" +
-                "<td class='operaciones'>&#160<a href='javascript:Editar(2, " + index + ")'>editar</a> &#160 &#160<a href='javascript:Eliminar(1, " + index + ")'>eliminar</a></td>" +
-                "</tr>";
-            // para cerrar la etiqueta de la tabla se hara un operacion segun las filas y el tamano del arreglo de temas y se cerrara la tabla
-            if (index % filas == filas - 1 || index == temas.length - 1) {
-                tabla += "</table>";
-                $("#div_botones_ingresar_temas").append("<label class='listado' id='listado_" + (contador_paginas) + "'>" +
-                    "del " + principio +
-                    " al " + (index + 1) +
-                    " de " + temas.length +
-                    "</label>");
-                contador_paginas += 1;
-            }
-
         });
-        $("#div_tabla_temas").html(tabla)
+        $("#tb_insertar_temas").html(tabla);
+        console.log("tabla");
+        const regresar = `<div class="row justify-content-around">
+                            <div class="col-4"><input type="button" value="Anterior" 
+                            ${inicio > 0 ? `onclick="MostrarTemas(${_pagina - 1})"` : ''}
+                          class="btn btn-outline-primary"></div>`;
+
+        const siguiente = `<div class="col-4"><input type="button" value="Siguiente" 
+                            ${final < temas.length ? `onclick="MostrarTemas(${_pagina + 1})"` : ''}
+                            class="btn btn-outline-success"></div>
+                            </div>`;
+        const numero = `<div><p class='text-center'>Del ${inicio + 1} al ${final} de ${temas.length}</p></div>`
+        $("#div_botones_ingresar_temas").html(regresar + numero + siguiente);
+    } else {
+        console.log("Aun no hay ningun libro ingresado");
     }
+
+
 }
 
 
@@ -1203,37 +1225,40 @@ function MostrarLibros(_pagina) {
     var autor_nombre = "";
     var tema_nombre = "";
     var tabla = "";
-    var filas = 5;
+    var filas = 3;
 
     const inicio = (_pagina * filas) - filas;
+
     const final = (_pagina * filas);
 
     var filtro = FiltrarLibros();
-    console.log(FiltrarLibros())
+    //console.log(FiltrarLibros())
 
     if (libros && libros.length > 0) {
         $.each(filtro, function (index, valor) {
-            // console.log("entra")
+
             $.each(autores, function (indice_autor, autor) {
-                if (autor.autor_id == libros[index].autor_id) {
+                if (autor.autor_id == valor.autor_id) {
                     autor_nombre = autor.nombre;
                 }
                 $.each(temas, function (indice_tema, tema) {
-                    if (tema.tema_id == libros[index].tema_libro) {
+                    if (tema.tema_id == valor.tema_libro) {
                         tema_nombre = tema.nombre_tema;
                     }
                 })
 
             });
+
             if (index >= inicio && index < final) {
+
                 tabla += "<tr>" +
                     "<td>" + (index + 1) + "</td>" +
-                    "<td>" + libros[index].titulo + "</td>" +
+                    "<td>" + valor.titulo + "</td>" +
                     "<td>" + autor_nombre + "</td>" +
                     "<td>" + tema_nombre + "</td>" +
-                    "<td>" + libros[index].ubicacion + "</td>" +
-                    "<td>" + libros[index].disponibles + "</td>"
-                if (libros[index].disponibles > 0) {
+                    "<td>" + valor.ubicacion + "</td>" +
+                    "<td>" + valor.disponibles + "</td>"
+                if (valor.disponibles > 0) {
                     tabla += "<td class='operaciones_libro libro_operacion'>&#160 &#160<a href='javascript:PrestarLibro(" + valor.id_libro + ")'>Prestar</a></td>" +
                         "</tr>";
                 } else {
@@ -1247,48 +1272,61 @@ function MostrarLibros(_pagina) {
 
         $("#tb_insertar_tabla").html(tabla);
         console.log("tabla");
-        const regresar = `<input type="button" value="Anterior" 
-                            ${inicio > 0 ? `onclick="MostrarLibros('',${_pagina - 1})"` : ''}
-                            class="siguiente">`;
-        const siguiente = `<input type="button" value="Siguiente" 
-                            ${final < libros.length ? `onclick="MostrarLibros('',${_pagina + 1})"` : ''}
-                            class="siguiente">`;
-        $("#botones_libros").html(regresar + siguiente);
+        const regresar = `<div class="row justify-content-around">
+                            <div class="col-4"><input type="button" value="Anterior" 
+                            ${inicio > 0 ? `onclick="MostrarLibros(${_pagina - 1})"` : ''}
+                          class="btn btn-outline-primary"></div>`;
+
+        const siguiente = `<div class="col-4"><input type="button" value="Siguiente" 
+                            ${final < filtro.length ? `onclick="MostrarLibros(${_pagina + 1})"` : ''}
+                            class="btn btn-outline-success"></div>
+                            </div>`;
+        const numero = `<div><p class='text-center'>Del ${inicio + 1} al ${filtro.length < filas ? `${filtro.length}` : final} de ${filtro.length}</p></div>`
+        $("#botones_libros").html(regresar + numero + siguiente);
     } else {
         console.log("Aun no hay ningun libro ingresado");
     }
 }
 
-function MostrarAutores() {
+
+function MostrarAutores(_pagina) {
     var autor = JSON.parse(localStorage.getItem("autores"));
     var tabla = "";
-    var filas = 4;
-    contador_paginas_autor = 0;
+    var filas = 2;
+    const inicio = (_pagina * filas) - filas;
+    const final = (_pagina * filas)
+
+    let lista = FiltrarAutores();
+    console.log(lista)
     if (autor && autor.length > 0) {
-        $.each(autor, function (index, valor) {
-            if (index % filas == 0) {
-                tabla += "<table border='1' id='tabla_" + contador_paginas_autor + "' class='tbl_autores listado' >"
-                principio_autor = index + 1;
+        $.each(lista, function (index, valor) {
+
+
+            if (index >= inicio && index < final) {
+                tabla += "<tr>" +
+                    "<td>" + (index + 1) + "</td>" +
+                    "<td>" + valor.nombre + "</td>" +
+                    "<td>" + valor.apellido + "</td>" +
+                    "<td>" + valor.nacionalidad + "</td>" +
+                    "<td>" + valor.nacimiento + "</td>" +
+                    "<td>&#160<a href>Ver</a></td>" +
+                    "</tr>";
             }
-            tabla += "<tr>" +
-                "<td class='autor_numero'>" + (index + 1) + "</td>" +
-                "<td class='nombre_autor' style='width:23.5%'>" + valor.nombre + "</td>" +
-                "<td class='apellido_autor' style='width:17.6%'>" + valor.apellido + "</td>" +
-                "<td class='nacionalidad_autor' style='width:17.7%'>" + valor.nacionalidad + "</td>" +
-                "<td class='ingreso_autor' style='width:17.5%'>" + valor.nacimiento + "</td>" +
-                "<td class='operaciones_autor' style='width:17.3%'>&#160<a href='javascript:Editar(3, " + index + ")'>editar</a> &#160 &#160<a href='javascript:Eliminar(2, " + index + ")'>eliminar</href></td>" +
-                "</tr>";
-            if (index % filas == filas - 1 || index == autor.length - 1) {
-                tabla += "</table>";
-                $("#div_botones_ingresar_autor").append("<label class='listado' id='listado_" + (contador_paginas_autor) + "'>" +
-                    "del " + principio_autor +
-                    " al " + (index + 1) +
-                    " de " + autor.length +
-                    "</label>");
-                contador_paginas_autor += 1;
-            }
-        });
-        $("#div_tabla_autores").html(tabla);
+        })
+
+
+        $("#tb_insertar_autores").html(tabla);
+        const regresar = `<div class="row justify-content-around">
+        <div class="col-4"><input type="button" value="Anterior" 
+        ${inicio > 0 ? `onclick="MostrarAutores(${_pagina - 1})"` : ''}
+      class="btn btn-outline-primary"></div>`;
+
+        const siguiente = `<div class="col-4"><input type="button" value="Siguiente" 
+        ${final < autor.length ? `onclick="MostrarAutores(${_pagina + 1})"` : ''}
+        class="btn btn-outline-success"></div>
+        </div>`;
+        const numero = `<div><p class='text-center'>Del ${inicio + 1} al ${lista.length} de ${autor.length}</p></div>`
+        $("#div_botones_ingresar_autor").html(regresar + numero + siguiente);
     }
 }
 
@@ -1326,9 +1364,10 @@ function ConfirmarPrestamo() {
     var extraer_prestamos = JSON.parse(localStorage.getItem("prestamos"));
 
     let pos_usuario = parseInt(localStorage.getItem("Usuario Activo"));
+    var libro_id = parseInt(localStorage.getItem("libro id"))
     console.log(pos_usuario);
 
-    if (!(libros[pos_usuario - 1].disponibles > 0)) {
+    if ((libros[libro_id - 1].disponibles > 0)) {
         for (var i = 0; i < 15; i++) {
             var numero = Math.floor(Math.random() * 55)
             nuevo_codigo += codigo[numero]
@@ -1338,72 +1377,77 @@ function ConfirmarPrestamo() {
 
 
         if (usuarios[pos_usuario - 1].prestamos < limites[0]) {
-            if (prestamos != null) {
-                $.each(extraer_prestamos, function (index, prestamo) {
-                    if (prestamo.token == nuevo_codigo) {
-                        token_repetido = true;
+            if (usuarios[pos_usuario - 1].estado == 1) {
+                if (prestamos != null) {
+                    $.each(extraer_prestamos, function (index, prestamo) {
+                        if (prestamo.token == nuevo_codigo) {
+                            token_repetido = true;
+                        }
+                    })
+                }
+
+                if (token_repetido) {
+                    for (var i = 0; i < 15; i++) {
+                        var numero = Math.floor(Math.random() * 62)
+                        nuevo_codigo += codigo[numero]
+                    }
+                }
+
+
+                let limites = JSON.parse(localStorage.getItem("limites"));
+                var numero_prestamo = JSON.parse(localStorage.getItem("prestamo id")) + 1;
+                //var numero_posicion_libro = JSON.parse(localStorage.getItem("posicion_libro")) + 1;
+                if (numero_prestamo < 2) {
+                    var prestamos = [];
+                } else {
+                    var prestamos = JSON.parse(localStorage.getItem("prestamos"));
+                }
+
+                let titulo = $("#titulo_prestamo").html();
+                $.each(libros, function (index, libro) {
+                    if (titulo == libro.titulo) {
+                        libro_id = libro.id_libro;
+                        posicion_pres = index;
+                    }
+                });
+
+                var usuario_activo = parseInt(localStorage.getItem("Usuario Activo"));
+                console.log(usuario_activo)
+                prestamos[numero_prestamo - 1] = {};
+                prestamos[numero_prestamo - 1].prestamo_id = numero_prestamo;
+                prestamos[numero_prestamo - 1].libro_id = libro_id;
+                prestamos[numero_prestamo - 1].usuario_id = usuario_activo;
+                prestamos[numero_prestamo - 1].fecha_prestamo = $("#fecha_prestamo").html();
+                prestamos[numero_prestamo - 1].fecha_devolucion = $("#fecha_devolucion").html();
+                prestamos[numero_prestamo - 1].estado = 1;
+                prestamos[numero_prestamo - 1].token = nuevo_codigo;
+                $.each(usuarios, function (index, usuario) {
+                    if (usuario.id == usuario_activo) {
+                        posicion_prestamo = index
                     }
                 })
+                console.log(posicion_prestamo);
+
+                libros[posicion_pres].disponibles -= 1;
+                var libros_str = JSON.stringify(libros);
+                localStorage.setItem("libros", libros_str);
+
+                usuarios[posicion_prestamo].prestamos += 1;
+                let usuarios_str = JSON.stringify(usuarios);
+                localStorage.setItem("usuarios", usuarios_str);
+
+                localStorage.setItem("prestamo id", numero_prestamo);
+                var prestamos_str = JSON.stringify(prestamos);
+                localStorage.setItem("prestamos", prestamos_str);
+                location.href = "libros.html"
+
             }
+            else {
+                toastr.warning('No puede prestar libros mientas este en estado 2 (moroso)');
 
-            if (token_repetido) {
-                for (var i = 0; i < 15; i++) {
-                    var numero = Math.floor(Math.random() * 62)
-                    nuevo_codigo += codigo[numero]
-                }
             }
-
-
-            let limites = JSON.parse(localStorage.getItem("limites"));
-            var numero_prestamo = JSON.parse(localStorage.getItem("prestamo id")) + 1;
-            //var numero_posicion_libro = JSON.parse(localStorage.getItem("posicion_libro")) + 1;
-            if (numero_prestamo < 2) {
-                var prestamos = [];
-            } else {
-                var prestamos = JSON.parse(localStorage.getItem("prestamos"));
-            }
-
-            let titulo = $("#titulo_prestamo").html();
-            $.each(libros, function (index, libro) {
-                if (titulo == libro.titulo) {
-                    libro_id = libro.id_libro;
-                    posicion_pres = index;
-                }
-            });
-
-            var usuario_activo = parseInt(localStorage.getItem("Usuario Activo"));
-            console.log(usuario_activo)
-            prestamos[numero_prestamo - 1] = {};
-            prestamos[numero_prestamo - 1].prestamo_id = numero_prestamo;
-            prestamos[numero_prestamo - 1].libro_id = libro_id;
-            prestamos[numero_prestamo - 1].usuario_id = usuario_activo;
-            prestamos[numero_prestamo - 1].fecha_prestamo = $("#fecha_prestamo").html();
-            prestamos[numero_prestamo - 1].fecha_devolucion = $("#fecha_devolucion").html();
-            prestamos[numero_prestamo - 1].estado = 1;
-            prestamos[numero_prestamo - 1].token = nuevo_codigo;
-            $.each(usuarios, function (index, usuario) {
-                if (usuario.id == usuario_activo) {
-                    posicion_prestamo = index
-                }
-            })
-            console.log(posicion_prestamo);
-
-            libros[posicion_pres].disponibles -= 1;
-            var libros_str = JSON.stringify(libros);
-            localStorage.setItem("libros", libros_str);
-
-            usuarios[posicion_prestamo].prestamos += 1;
-            let usuarios_str = JSON.stringify(usuarios);
-            localStorage.setItem("usuarios", usuarios_str);
-
-            localStorage.setItem("prestamo id", numero_prestamo);
-            var prestamos_str = JSON.stringify(prestamos);
-            localStorage.setItem("prestamos", prestamos_str);
-            //location.href = "libros.html"
-
-        }
-        else {
-            alert("llego a su limite de prestamos")
+        } else {
+            alert("llego a su limite de prestamos");
         }
     } else {
         toastr.warning("No hay mas unidades disponibles de este libros");
@@ -1412,12 +1456,13 @@ function ConfirmarPrestamo() {
 
 
 
-function FiltrarLibros(_tipo) {
+function FiltrarLibros() {
     var libros = JSON.parse(localStorage.getItem("libros"));
     var autores = JSON.parse(localStorage.getItem("autores"));
     var temas = JSON.parse(localStorage.getItem("temas"));
 
     console.log($("#slc_buscar_libro").val());
+
 
     switch (parseInt($("#slc_buscar_libro").val())) {
         case 1:
@@ -1428,14 +1473,38 @@ function FiltrarLibros(_tipo) {
             })
             break;
         case 2:
-            var lista = autores.filter(function (value) {
+            var busqueda = autores.filter(function (value) {
                 let nombre = value.nombre;
                 console.log(nombre)
                 let nombre_buscar = $("#txt_buscar_libro").val();
-                return nombre.indexOf(nombre_buscar) > -1 ;
-            })
+                return nombre.indexOf(nombre_buscar) > -1;
+            });
+            var lista = [];
+            $.each(libros, function (indice, libro) {
+                $.each(busqueda, function (index, autor) {
+                    if (autor.autor_id == libro.autor_id) {
+                        lista.push(libro)
+                    }
+                });
+            });
             break;
+        case 3:
+            let buscar_tema = temas.filter(function (value) {
+                let nombre = value.nombre_tema;
+                let nombre_buscar = $("#txt_buscar_libro").val();
+                return nombre.indexOf(nombre_buscar) > -1;
+            });
+            var lista = [];
+            $.each(libros, function (indice, libro) {
+                $.each(buscar_tema, function (index, tema) {
+                    if (tema.tema_id == libro.tema_libro) {
+                        lista.push(libro);
+                    }
+                });
+            });
+            break
     }
+    console.log(lista)
     return lista;
 }
 
@@ -1452,72 +1521,414 @@ function MostrarPrestamos(_pagina) {
     let autor_nombre = "";
     let tema_nombre = "";
     let posicion_libro = "";
-    let filas = 10;
+    let filas = 5;
     var tabla = "";
+    var devueltos = "";
     const inicio = (_pagina * filas) - filas;
     const final = (_pagina * filas);
-
-    let list = prestamos.filter(valor => num_usuario == valor.usuario_id);
+    let list;
+    // 
 
     if (prestamos && prestamos.length > 0) {
+        list = prestamos.filter(valor => num_usuario == valor.usuario_id);
+        console.log(list)
+        
+        console.log(historial)
+
+
         $.each(list, function (index, prestamo) {
+            if (prestamo.estado == 1 || prestamo.estado == 2) {
+                $.each(libros, function (index, libro) {
+                    if (libro.id_libro == prestamo.libro_id) {
+                        posicion_libro = libro.titulo;
+                        $.each(autores, function (index, autor) {
+                            if (libro.autor_id == autor.autor_id) {
+                                autor_nombre = autor.nombre;
+                            };
+                        });
+                        $.each(temas, function (index, tema) {
+                            if (tema.tema_id == libro.tema_libro) {
+                                tema_nombre = tema.nombre_tema;
+                            };
+                        });
+                    };
+                    // console.log('entra prestamo');
+                });
+
+                if (index >= inicio && index < final) {
+                    tabla += `<tr>
+                            <td>${index + 1}</td>
+                            <td>${prestamo.token}</td>
+                            <td>${posicion_libro}</td>
+                            <td>${autor_nombre}</td>
+                            <td>${tema_nombre}</td>
+                            <td>${prestamo.fecha_prestamo}</td>
+                            <td>${prestamo.fecha_devolucion}</td>            
+                        `
+                    if (prestamo.estado == 1) {
+                        tabla += `  <td style='color: blue'>Prestado</td>
+                                    </tr>`;
+                    }
+                    if (prestamo.estado == 2) {
+                        tabla += `  <td style='color: red'>Mora</td>
+                                    </tr>`;
+                    }
+                    if (prestamo.estado == 3) {
+                        tabla += `<td style='color: green'>Devuelto</td>
+                                    </tr>`;
+                    }
+                    if (prestamo.estado == 4) {
+                        tabla += `  <td>Devuelto con Mora</td>
+                                    </tr>`;
+                    }
+                }
+            }
+        });
+
+        $("#tbl_prestamos_realizados").html(tabla);
+        
+    }
+    if (prestamos && prestamos.length > 0) {
+        let historial = list.filter(element => !(element.estado == 2 || element.estado == 1));
+        $.each(historial, function (index, prestamo) {
             $.each(libros, function (index, libro) {
                 if (libro.id_libro == prestamo.libro_id) {
                     posicion_libro = libro.titulo;
                     $.each(autores, function (index, autor) {
                         if (libro.autor_id == autor.autor_id) {
                             autor_nombre = autor.nombre;
-                        }
+                        };
                     });
                     $.each(temas, function (index, tema) {
                         if (tema.tema_id == libro.tema_libro) {
                             tema_nombre = tema.nombre_tema;
-                        }
+                        };
                     });
-                }
+                };
             });
 
             if (index >= inicio && index < final) {
-                tabla += `<tr>
-                                    <td>${index + 1}</td>
-                                    <td>${prestamo.token}</td>
-                                    <td>${posicion_libro}</td>
-                                    <td>${autor_nombre}</td>
-                                    <td>${tema_nombre}</td>
-                                    <td>${prestamo.fecha_prestamo}</td>
-                                    <td>${prestamo.fecha_devolucion}</td>            
-                                `
+                devueltos += `<tr>
+                            <td>${index + 1}</td>
+                            <td>${prestamo.token}</td>
+                            <td>${posicion_libro}</td>
+                            <td>${autor_nombre}</td>
+                            <td>${tema_nombre}</td>
+                            <td>${prestamo.fecha_prestamo}</td>
+                            <td>${prestamo.fecha_devolucion}</td>            
+                        `
                 if (prestamo.estado == 1) {
-                    tabla += `  <td style='color: blue'>Prestado</td>
-                                    </tr>`
+                    devueltos += `  <td style='color: blue'>Prestado</td>
+                                    </tr>`;
                 }
                 if (prestamo.estado == 2) {
-                    tabla += `  <td style='color: red'>Mora</td>
-                                    </tr>`
+                    devueltos += `  <td style='color: red'>Mora</td>
+                                    </tr>`;
                 }
                 if (prestamo.estado == 3) {
-                    tabla += `<td style='color: green'>Devuelto</td>
-                                    </tr>`
+                    devueltos += `<td style='color: green'>Devuelto</td>
+                                    </tr>`;
                 }
                 if (prestamo.estado == 4) {
-                    tabla += `  <td>Devuelto con Mora</td>
-                                    </tr>`
+                    devueltos += `  <td>Devuelto con Mora</td>
+                                    </tr>`;
                 }
             }
 
-
-        })
-
-        $("#tbl_prestamos_realizados").html(tabla);
-
+        });
+        $("#historial").html(devueltos)
+        
     }
 }
 
+/* function FiltrarHistorial() {
+     var libros = JSON.parse(localStorage.getItem("libros"));
+     var autores = JSON.parse(localStorage.getItem("autores"));
+   var temas = JSON.parse(localStorage.getItem("temas"));
+     var prestamos = JSON.parse(localStorage.getItem('prestamos'));
+     switch(parseInt($("#slc_busqueda_historial").val())){
+         case 0:
+             var lista = prestamos.filter(value => {
+                 var nom_codigo = value.token;
+                 var codigo_buscar = $("#txt_busqueda_historial").val()
+                 return nom_codigo.indexOf(codigo_buscar) >-1;
+             });
+             break;
+     }
+     return lista;
+}*/ 
+
+
+function CalcularTiempo() {
+    let prestamos = JSON.parse(localStorage.getItem('prestamos'))
+    let usuarios = JSON.parse(localStorage.getItem('usuarios'));
+    let usuario_activo = JSON.parse(localStorage.getItem('Usuario Activo'));
+    var fecha = moment();
+    $.each(prestamos, function (indice, prestamo) {
+        let fecha = moment();
+        let fecha_final = moment(prestamo.fecha_devolucion, 'DD/MM/Y');
+        // console.log(prestamos[indice].fecha_devolucion);
+        if (fecha.diff(fecha_final, 'days') > 0) {
+            // console.log(fecha.diff(fecha_final, 'days'));
+            // cambia el estado del libro que a 2 que significa mora
+            if (!(prestamo.estado == 3 || prestamo.estado == 4)) {
+                prestamo.estado = 2;
+            }
+            localStorage.setItem("prestamos", JSON.stringify(prestamos));// guardamos en la almacenamiento local
+
+            prestamos.forEach((prestamo, index) => {
+                if (prestamo.estado == 2) {
+                    usuarios[prestamo.usuario_id - 1].estado = 2;
+                }
+                // console.log(prestamo.usuario_id - 1)
+            });
+            localStorage.setItem('usuarios', JSON.stringify(usuarios))
+        }
+    });
+
+}
+CalcularTiempo()
+
+
+function GuardarCambiosPerfil() {
+    let usuarios = JSON.parse(localStorage.getItem('usuarios'));
+    var nombre = $("#txt_nombre").val();
+    var apellido = $("#txt_apellido").val();
+    var direccion = $("#txt_direccion").val();
+    var telefono = $("#txt_telefono").val();
+    var contrasena = $("#txt_contrasena").val();
+    var correo = $("#txt_correo").val();
+    var contrasena_confirmar = $("#txt_confirmar_contrasena").val();
+    var CUI = $("#txt_cui").val();
+    var nacimiento_fecha = $("#txt_nacimiento").val();
+    var genero = $("input:radio[name=rad_genero]:checked").val();
+    var departamento = $("#slc_departamento").val();
+    var municipio = $("#slc_municipio").val();
+    var error = false;
+    var mensaje = "";
+    let activo = JSON.parse(localStorage.getItem('Usuario Activo'));
+    // let posicion_actual;
+    usuarios.forEach((usuario, indice) => {
+        if (usuario.id == activo) {
+            posicion_actual = indice;
+        }
+    });
+
+    //validacio nombre
+    if (nombre == "") {
+        error = true;
+        mensaje += "casilla nombre no puede estar vacia";
+    }
+    // validacion apellido
+    if (apellido == "") {
+        error = true;
+        mensaje += "\ncasilla appellido no puede ir vacia";
+    }
+
+    // validacion direccion 
+    if (direccion == "") {
+        error = true;
+        mensaje += "\ncasilla direccion no puede ir vacia";
+    }
+
+    //validacion telefono
+    if (telefono == "") {
+        error = true;
+        mensaje += "\ncasilla telefono no puede ir vacias";
+
+    } else {
+        if (telefono.length < 8) {
+            error = true;
+            mensaje += "\ntelefono debe tener 8 caracteres"
+        } else {
+            mensaje += "\nTelefono: " + telefono;
+        }
+
+    }
+
+    //validacion correo
+
+    if (correo !== usuarios[posicion_actual].correo) {
+        var error_correo = false;
+        var validar_correo = JSON.parse(localStorage.getItem("usuarios"))
+        if (validar_correo && validar_correo.length > 0) {
+            $.each(validar_correo, function (index, valor) {
+                if (valor.correo == correo) {
+                    error_correo = true;
+                }
+
+            });
+            if (error_correo == true) {
+                error = true;
+                toastr.error("Este correo ya existe \npor favor inserta otro");
+            } else {
+                if (correo == "") {
+                    error = true;
+                    mensaje += "\nDebe de insertar un correo"
+                } else {
+                    if (/^[a-zA-Z]+[a-z0-9A-Z\_\.\-]+@[a-z]{1,}\.[a-z0-9]{2,}$/.test(correo)) {
+                        mensaje += "\nCorreo: " + correo;
+                    } else {
+                        error = true;
+                        mensaje += "\nCorreo invalido";
+                    }
+                }
+            }
+        }
+    }
+    console.log(error_correo);
+
+    // validacion contrasena
+
+    if (contrasena != "") {
+        if (!(contrasena >= 8)) {
+            error = true;
+            mensaje += 'La contrasena debe tener 8 0 mas digitos'
+        }
+        ValidarContrasena(contrasena, error, mensaje);
+        error = ValidarContrasena(contrasena, error, mensaje);
+        if (ValidarContrasena(contrasena, error, mensaje) != false) {
+            usuarios[posicion_actual].contrasena = contrasena;
+            usuarios[posicion_actual].validar_contrasena = contrasena_confirmar;
+        }
+        if (contrasena_confirmar == contrasena && contrasena.length > 1) {
+            mensaje += "\nContrasenas correctas";
+        } else {
+            mensaje += "\nLas contrasenas no son iguales";
+            error = true;
+        }
+    }
+
+    if (!genero) {
+        mensaje += "\nDebe seleccionar un genero";
+        error = true;
+    } else {
+        if (genero == "1") {
+            mensaje += "\nGenero: Masculino"
+        } else {
+            mensaje += "\nGenero: Femenino"
+        }
+    }
+
+    // validacion nacimiento 
+    if (nacimiento_fecha == "") {
+        mensaje += "\nCasilla nacimiento no puede ir vacia";
+        error = true;
+    } else {
+        if (/^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{4,4}$/.test(nacimiento_fecha)) {
+            var validar_fecha = nacimiento_fecha.split("/")
+            console.log(validar_fecha);
+            var error_fecha = "";
+            var contador_errores = 0;
+
+            if (parseInt(validar_fecha[0]) > 31) {
+                error_fecha += "\nEl dia no puede tener mas de 31";
+                contador_errores += 1;
+
+            }
+            if (parseInt(validar_fecha[1]) > 12) {
+                error_fecha += "\nEl mes no puede contener mas de 12";
+                contador_errores += 1;
+
+            }
+            if (contador_errores == 0) {
+                mensaje += "\nfecha valida";
+            } else {
+                toastr.warning(error_fecha)
+            }
+        } else {
+            console.log('formato invalido');
+        }
+    }
+
+    // validacion CUI
+
+    if (CUI == "") {
+        mensaje += "\nel cui no puede estar vacio";
+        error = true;
+    } else {
+        if (CUI.length == 13) {
+            mensaje += "\nCUI: " + CUI;
+        } else {
+            mensaje += "\nEl CUI debe tener 13 caracteres";
+            error = true;
+        }
+
+    }
+
+    if ($("#txt_zona").val() == "") {
+        error = true;
+        mensaje += "\nDebe de ingresar la zona";
+    }
+
+    if ($("#slc_escolaridad").val() > 0) {
+        if ($("#txt_institucion").val() == "") {
+            error = true;
+            mensaje += "\nDebe de insertar institucion educativa para continuar";
+        } else {
+            toastr.info("institucion insertada");
+        }
+    }
+
+
+    if (error) {
+        alert(mensaje);
+    } else {
 
 
 
+        usuarios[posicion_actual].nombre = nombre;
+        usuarios[posicion_actual].apellido = apellido;
+        usuarios[posicion_actual].direccion = direccion;
+        usuarios[posicion_actual].telefono = telefono;
+
+        usuarios[posicion_actual].genero = genero;
+        usuarios[posicion_actual].fecha_de_nacimiento = nacimiento_fecha;
+        usuarios[posicion_actual].departamento = departamento
+        usuarios[posicion_actual].municipio = municipio;
+        usuarios[posicion_actual].cui = CUI;
+        usuarios[posicion_actual].correo = correo;
+        usuarios[posicion_actual].zona = $("#txt_zona").val();
+
+        usuarios[posicion_actual].escolaridad = $("#slc_escolaridad").val();
+        if ($("#slc_escolaridad").val() > 0) {
+            usuarios[posicion_actual].instucion_educativa = $("#txt_institucion").val();
+        }
+        var usuarios_str = JSON.stringify(usuarios);
+        localStorage.setItem("usuarios", usuarios_str);
+
+        console.log(usuarios);
+    }
 
 
+}
 
+function FiltrarAutores() {
+    let autores = JSON.parse(localStorage.getItem('autores'));
+
+    switch (parseInt($('#slc_buscar_autor').val())) {
+        case 1:
+            var lista = autores.filter(function (value) {
+                let nombre = value.nombre;
+                let nombre_buscar = $("#txt_buscar_autor").val();
+                return nombre.indexOf(nombre_buscar) > -1;
+            })
+            break;
+        case 2:
+            var lista = autores.filter(function (value) {
+                let apellido = value.apellido.toLowerCase();
+                let apellido_buscar = $("#txt_buscar_autor").val();
+                return apellido.indexOf(apellido_buscar) > -1;
+            });
+            break;
+        case 3:
+            var lista = autores.filter(function (value) {
+                let nacionalidad = value.nacionalidad.toLowerCase();
+                let nacionalidad_buscar = $("#txt_buscar_autor").val();
+                return nacionalidad.indexOf(nacionalidad_buscar) > -1;
+            })
+    }
+    return lista;
+}
 
 

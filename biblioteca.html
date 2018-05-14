@@ -10,6 +10,12 @@
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
     <script src="biblioteca.js"></script>
+    <script>
+        $(function(){
+            InsertarDepartamentos();
+            InsertarMunicipios();
+        })
+    </script>
 </head>
 
 <body>
@@ -80,7 +86,7 @@
                     <option value="6">doctorados</option>
                 </select>
 
-                <input type="file" id="btn_insertar_foto" class="texto" onchange="leerArchivo()" style="margin-top: 10px; margin-bottom: 10px;float: left;">
+                <input type="file" id="btn_insertar_foto" class="texto"  accept="image/*" onchange="leerArchivo()" style="margin-top: 10px; margin-bottom: 10px;float: left;">
                 <div id="foto">
 
                 </div>

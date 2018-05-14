@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" media="screen" href="biblioteca.css" />
     <script src="jquery.min.js"></script>
     <script src="toastr.min.js"></script>
+    <script src="moment-with-locales.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="toastr.min.css" />
     
-    <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 </head>
 
 <body>
@@ -29,11 +29,12 @@
         </div>
 
         <div id="div_tabla_prestamos">
+
             <table id="tbl_mis_prestamos" border="1">
                 <thead>
                     <th class="th_numero">#</th>
-                    <th class="th" >Codigo</th>
-                    <th class="th" style="width: 250px;">Libro</th>
+                    <th class="th">Codigo</th>
+                    <th class="th" style="width: 150px;">Libro</th>
                     <th class="th">Autor</th>
                     <th class="th">Tema</th>
                     <th class="th">Prestamo</th>
@@ -41,14 +42,48 @@
                     <th class="th">Estado</th>
                 </thead>
                 <tbody id="tbl_prestamos_realizados">
-        
+
+                </tbody>
+            </table>
+
+        </div>
+        <div id="historial_prestamos" style="margin-top: 25px;">
+            <div style="float: left; width: 90%;">
+                <label style="font-size: 25px;">Historial</label>&#160&#160&#160<label>Buscar Por:</label>
+                <select id="slc_busqueda_historial">
+                    <option value="0">Seleccione una opcion</option>
+                    <option value="1">Libro</option>
+                    <option value="2">Autor</option>
+                    <option value="3">tema</option>
+                    <option value="4">Ubicacion</option>
+                    <option value="0">Codigo de prestamo</option>
+                </select>&#160&#160
+                <input type="text" id="txt_busqueda_historial">
+                <input type="button" value="Buscar" id="btn_historial">
+            </div>
+            <table id="tbl_mi_historial" border="1">
+                <thead>
+                    <th class="th_numero">#</th>
+                    <th class="th">Codigo</th>
+                    <th class="th" style="width: 150px;">Libro</th>
+                    <th class="th">Autor</th>
+                    <th class="th">Tema</th>
+                    <th class="th">Prestamo</th>
+                    <th class="th">Devolucion</th>
+                    <th class="th">Estado</th>
+                </thead>
+                <tbody id="historial">
+
                 </tbody>
             </table>
         </div>
     </div>
-    
+
     <!-- Dependencias  -->
     <script src="biblioteca.js"></script>
+    <script>
+    MostrarPrestamos(1);
+    </script>
 </body>
 
 </html>

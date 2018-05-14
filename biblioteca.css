@@ -127,7 +127,7 @@
 .texto_login{
     float: left;
     text-align: left;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     width: 22%;
     font-size: 30px;
     margin-left: 15px;
@@ -320,22 +320,24 @@ width: 78%;
     margin-left: 230px;
 }
 
-/* Ventana de prestamos*/
+.listado{
+    display: none;
+}
 
 #div_tabla_prestamos{
-    width: 99%;
     height: 300px;
-    border: solid black 1px;
+    /* overflow: auto; */
+}
+
+
+
+#div_tabla_prestamos{
     float: left;
+    height: 160px;
+    overflow: auto;
 }
 
-.th{
-    width: 115px;
+#historial_prestamos{
+    float: left;
+    height: 160px;
 }
-
-.th_numero{
-    width: 15px;
-}
-
-
-
